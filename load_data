@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+import cv2
+import os
+from PIL import Image
+import matplotlib.pyplot as plt
+
+n_classes = 7
+directory = '/content/drive/My Drive/New_Colab/Myhal photos'
+
+X = np.load(os.path.join(directory,'X.npy'))
+y = np.load(os.path.join(directory,'y.npy'))
+
+ns = np.random.permutation(X.shape[0])
+
+X = X[ns]
+y = y[ns]
+
+percent_ind = int(0.8*X.shape[0])
+x_train, x_test, y_train, y_test = X[:percent_ind], X[percent_ind:], y[:percent_ind], y[percent_ind:]
+train_ds = tf.data.Dataset.from_tensor_slices(
+    (x_train, y_train)).shuffle(10000).batch(16)
+
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(16)
